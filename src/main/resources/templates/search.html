@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head th:replace="header::meta_header(~{::title})">
+    <title>シネ根 -- 作品名で検索</title>
+  </head>
+  <body>
+    <header th:replace="header::header"></header>
+    <main class="flex-shrink-0">
+      <div class="container">
+        <div th:replace="header::top"></div>
+        <div class="row mb-3">
+          <div class="col-md-3">
+              <div th:replace="header::left"></div>
+          </div>
+          <div class="col-md-6">
+            <span th:if="${#strings.isEmpty(searchTitle)}">
+              <h2><span th:text="作品名なしで検索"></span></h2>
+            </span>
+            <span th:unless="${#strings.isEmpty(searchTitle)}">
+              <h2><span th:text="|作品名 ${searchTitle} で検索|"></span></h2>
+            </span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" th:each="member : ${searchList}">
+                <a th:href="@{/detail/{id}(id=${member.id})}" th:text="${member.title}">title</a>
+                <br>
+                <p>
+                  <span th:text="${member.shortComment}"></span>
+                  <br>
+                  <span th:text="${#temporals.format(member.watchedDate, 'yyyy年MM月dd日')}"></span>
+                  <span th:text="${member.theater}"></span>
+                  <br>
+                  <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn btn-primary" th:href="@{/edit/{id}(id=${member.id})}" role="button">編集</a>
+                </p>
+              </li>
+            </ul>
+            <span th:if="${#lists.isEmpty(searchList)}" th:text="該当する作品はありません。"></span>
+            <br>
+            <div th:unless="${#lists.isEmpty(searchList)}">
+              <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li th:class="${page.first} ? 'page-item disabled':'page-item'">
+                      <a th:if="${(page.first)}" class="page-link" href="javascript:void(0);"><i class="fas fa-chevron-left"></i>前へ</a>
+                      <a th:if="${!(page.first)}" class="page-link" th:href="@{${url}(title=${searchTitle}, page=(${page.number}))}"><i class="fas fa-chevron-left"></i>前へ</a>
+                    </li>
+                    <li th:each='i : ${#numbers.sequence(0, page.totalPages-1)}' th:class="(${i}==${page.number})? 'active disabled page-item' : 'page-item'">
+                      <a th:if='${i}==${page.number}' class="page-link " href="javascript:void(0);">
+                          <span th:text='${i+1}'>1</span>
+                      </a>
+                      <a th:if='${i}!=${page.number}' class="page-link " th:href="@{${url}(title=${searchTitle}, page=${i+1})}">
+                          <span th:text='${i+1}'>1</span>
+                      </a>
+                    </li>
+                    <li th:class="${page.last} ? 'page-item disabled':'page-item '">
+                      <a th:if="${(page.last)}" class="page-link" href="javascript:void(0);">次へ<i class="fas fa-chevron-right"></i></a>
+                      <a th:if="${!(page.last)}" class="page-link" th:href="@{${url}(title=${searchTitle}, page=(${page.number + 2}))}">次へ<i class="fas fa-chevron-right"></i></a>
+                    </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="col-md-3">
+          <div th:replace="header::right"></div>
+          </div>
+        </div>
+      </div>
+      <footer th:replace="header::footer"></footer>
+    </main>
+  </body>
+</html>

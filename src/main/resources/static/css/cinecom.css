@@ -1,0 +1,62 @@
+@charset "utf-8";
+/* 順序なしリストのマーカー非表示、マーカーの余白を0に設定 */
+ul {
+  list-style:none;
+  padding-left: 0;
+}
+
+span.title {
+  display: block;
+  float:left;
+}
+
+span.short_comment {
+  display: block;
+  margin-left: 140px;
+}
+
+span.watched_date {
+  float:left;
+}
+
+span.watched_time {
+  display: block;
+  margin-left: 110px;
+}
+
+span.theater {
+  display: block;
+  margin-left: 0px;
+}
+
+span.screen {
+  display: block;
+  margin-left: 110px;
+}
+
+li._1st-item {
+  display: inline;
+}
+
+li._2nd-item {
+  margin-left: 5px;
+  display: inline;
+}
+div.img-hidden {
+  height: 300px;
+  overflow: hidden;
+}
+
+footer.footer {
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+}
+h1, h2, h3 {
+font-family: "Meiryo UI" ;
+}
+
+/* フッターでコンテンツがケラれる回避する設定 */
+main > .container {
+  padding: 60px 0px 60px;
+}

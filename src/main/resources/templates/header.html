@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <meta charset="UTF-8">
+  <head th:fragment="meta_header(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/cinecom.css" type="text/css" media="screen" />
+    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+    <title th:replace="${title}">title</title>
+  </head>
+  <body>
+    <header th:fragment="header">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">ホーム</a>
+              </li>
+              <dev sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/add}">新規登録</a>
+                </li>
+              </dev>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  ユーザ
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <dev sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li><a class="dropdown-item" th:href="@{/user}">ユーザ登録</a></li>
+                  </dev>
+                  <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <li><a class="dropdown-item" th:href="@{/logout}">ログアウト</a></li>
+                  </div>
+                  <div th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <li><a class="dropdown-item" th:href="@{/login}">ログイン</a></li>
+                  </div>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex" th:action="@{/search}" th:object="${search}" th:method="get">
+              <input class="form-control me-2" type="search" th:field="*{title}" placeholder="タイトルを入力" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <footer th:fragment="footer" class="footer mt-auto py-3 fixed-bottom bg-light">
+      <div class="container">
+        <span class="text-muted">Copyright © 2021 isaku</span>
+      </div>
+    </footer>
+    <div th:fragment="top">
+      <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+          <h1 class="display-4">シネ根</h1>
+          <p class="lead my-3">isakuによる映画レビュー</p>
+        </div>
+      </div>
+    </div>    
+    <div th:fragment="left">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div th:if="${#authorization.expression('!isAnonymous()')}">
+            <span sec:authentication="principal.username"></span>さん
+          </div>
+          <div th:if="${#authorization.expression('isAnonymous()')}">
+            ゲストユーザさん
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div th:fragment="right">
+      <ul>
+        <li><h2>アーカイブ</h2></li>
+        <li th:each="yearMonth : ${yearMonthList}">
+         　<a th:href="@{/yearmonthlist/{yearMonth}(yearMonth=${yearMonth})}"
+            th:text="|${#strings.substring(yearMonth,0,4)}年${#strings.substring(yearMonth,4.2)}月の映画|">yearMonth</a>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
