@@ -27,10 +27,10 @@ public interface ReviewDao {
      * @return
      */
     @Select
-    List<MonthlyListReviewItem> getLastMonthlyList(Integer limit, Long offset);
+    List<MonthlyListReviewItem> getLastMonthlyList(Integer limit, Long offset, boolean isEableOnly);
 
     @Select
-    int getCountLastMonth();
+    int getCountLastMonth(boolean isEableOnly);
 
     /**
      * @param id
@@ -47,30 +47,31 @@ public interface ReviewDao {
      * @return
      */
     @Select
-    List<MonthlyListReviewItem> selectByTitle(String title, Integer limit, Long offset);
+    List<MonthlyListReviewItem> selectByTitle(String title, Integer limit, Long offset, boolean isEableOnly);
 
     @Select
-    int getCountByTitle(String title);
+    int getCountByTitle(String title, boolean isEableOnly);
 
     /**
      * 
      * @return
      */
     @Select
-    List<String> getYearMonthList();
+    List<String> getYearMonthList(boolean isEableOnly);
 
     /**
      * 
      * @param yearMonth
      * @param limit
      * @param offset
+     * @param isEableOnly
      * @return
      */
     @Select
-    List<MonthlyListReviewItem> selectByYearMonth(String yearMonth, Integer limit, Long offset);
+    List<MonthlyListReviewItem> selectByYearMonth(String yearMonth, Integer limit, Long offset, boolean isEableOnly);
 
     @Select
-    int getCountByYearMonth(String yearMonth);
+    int getCountByYearMonth(String yearMonth, boolean isEableOnly);
 
     /**
      * @param entity

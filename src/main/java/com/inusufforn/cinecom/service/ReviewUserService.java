@@ -9,6 +9,8 @@ import com.inusufforn.cinecom.dto.ReviewUserRegisterDto;
 import com.inusufforn.cinecom.entity.ReviewUser;
 
 /**
+ * ユーザ情報サービス.
+ * 
  * @author isaku
  *
  */
