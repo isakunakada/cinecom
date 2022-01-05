@@ -12,6 +12,8 @@ import com.inusufforn.cinecom.entity.MonthlyListReviewItem;
 import com.inusufforn.cinecom.entity.Review;
 
 /**
+ * 作品レビュー情報サービス
+ * 
  * @author isaku
  * Serviceのinterfaceにはアノテーションを記述しない。
  */
@@ -20,24 +22,29 @@ public interface ReviewService {
     /**
      * 最新年月の作品リストを取得.
      * 
-     * @return 最新年月作品のリスト
+     * @param pageable
+     * @param isEableOnly
+     * @return
      */
-    Page<MonthlyListReviewItem> getPage(Pageable pageable);
+    Page<MonthlyListReviewItem> getListByLastYearMonth(Pageable pageable, boolean isEableOnly);
 
     /**
      * 年月の作品リストを取得.
      * 
+     * @param pageable
      * @param yearMonth 作品リストを取得したい年月
+     * @param isEableOnly
      * @return 取得したい年月の作品リスト
      */
-    Page<MonthlyListReviewItem> getMonthYearList(Pageable pageable, String yearMonth);
+    Page<MonthlyListReviewItem> getListByYearMonth(Pageable pageable, String yearMonth, boolean isEableOnly);
 
     /**
      * 掲載作品の年月のリストを取得.
      * 
-     * @return 掲載作品の年月のリスト
+     * @param isEableOnly
+     * @return
      */
-    List<String> getYearMonthList();
+    List<String> getYearMonthList(boolean isEableOnly);
 
     /**
      * 作品IDから詳細情報を取得.
@@ -69,6 +76,6 @@ public interface ReviewService {
      * @param title
      * @return
      */
-    Page<MonthlyListReviewItem> getSearchList(Pageable pageable, String title);
+    Page<MonthlyListReviewItem> getSearchList(Pageable pageable, String title, boolean isEableOnly);
 
 }

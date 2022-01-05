@@ -29,9 +29,9 @@ public class ReviewServiceImpl implements ReviewService {
     * @inheritDoc
     */
     @Override
-    public Page<MonthlyListReviewItem> getPage(Pageable pageable) {
-        List<MonthlyListReviewItem> list = reviewDao.getLastMonthlyList(pageable.getPageSize(), pageable.getOffset());
-        int count = reviewDao.getCountLastMonth();
+    public Page<MonthlyListReviewItem> getListByLastYearMonth(Pageable pageable, boolean isEableOnly) {
+        List<MonthlyListReviewItem> list = reviewDao.getLastMonthlyList(pageable.getPageSize(), pageable.getOffset(), isEableOnly);
+        int count = reviewDao.getCountLastMonth(isEableOnly);
         return new PageImpl<MonthlyListReviewItem>(list, pageable, count);
     }
 
@@ -39,10 +39,9 @@ public class ReviewServiceImpl implements ReviewService {
     * @inheritDoc
     */
     @Override
-    public Page<MonthlyListReviewItem> getMonthYearList(Pageable pageable, String yearMonth) {
-        // ページネーション実装
-        List<MonthlyListReviewItem> list = reviewDao.selectByYearMonth(yearMonth, pageable.getPageSize(), pageable.getOffset());
-        int count = reviewDao.getCountByYearMonth(yearMonth);
+    public Page<MonthlyListReviewItem> getListByYearMonth(Pageable pageable, String yearMonth, boolean isEableOnly) {
+        List<MonthlyListReviewItem> list = reviewDao.selectByYearMonth(yearMonth, pageable.getPageSize(), pageable.getOffset(), isEableOnly);
+        int count = reviewDao.getCountByYearMonth(yearMonth, isEableOnly);
         return new PageImpl<MonthlyListReviewItem>(list, pageable, count);
     }
 
@@ -50,8 +49,8 @@ public class ReviewServiceImpl implements ReviewService {
     * @inheritDoc
     */
     @Override
-    public List<String> getYearMonthList() {
-        return reviewDao.getYearMonthList();
+    public List<String> getYearMonthList(boolean isEableOnly) {
+        return reviewDao.getYearMonthList(isEableOnly);
     }
 
     /**
@@ -80,9 +79,9 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * {@inheritDoc}
      */
-    public Page<MonthlyListReviewItem> getSearchList(Pageable pageable, String title) {
-        List<MonthlyListReviewItem> list = reviewDao.selectByTitle(title, pageable.getPageSize(), pageable.getOffset());
-        int count = reviewDao.getCountByTitle(title);
+    public Page<MonthlyListReviewItem> getSearchList(Pageable pageable, String title, boolean isEableOnly) {
+        List<MonthlyListReviewItem> list = reviewDao.selectByTitle(title, pageable.getPageSize(), pageable.getOffset(),isEableOnly);
+        int count = reviewDao.getCountByTitle(title, isEableOnly);
         return new PageImpl<MonthlyListReviewItem>(list, pageable, count);
     }
 

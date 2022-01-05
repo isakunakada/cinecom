@@ -13,56 +13,63 @@
             <div th:replace="header::left"></div>
           </div>
           <div class="col-md-6">
-            <form th:action="@{/update}" th:object="${detail}" th:method="post">
+            <form th:action="@{/update}" th:object="${reviewDto}" th:method="post">
               <input type="hidden" th:field="*{id}">
-              <div class="form-group">
-                <label>作品タイトル：<span class="text-danger">※</span></label>
-                <input type="text" th:field="*{title}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>見出しコメント：<span class="text-danger">※</span></label>
-                <input type="text" th:field="*{shortComment}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>鑑賞日：<span class="text-danger">※</span></label>
-                <input type="text" th:field="*{watchedDate}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>上映時刻：<span class="text-danger">※</span></label>
-                <input type="text" th:field="*{watchedTime}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>劇場名：<span class="text-danger">※</span></label>
-                <input type="text" th:field="*{theater}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>スクリーン：<span class="text-danger"></span></label>
-                <input type="text" th:field="*{screen}" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>コメント本文：</label>
-                <textarea th:field="*{mainComment}" rows="10" cols="40" class="form-control">編集中</textarea>
-              </div>
-              <div class="form-group">
-                <label>評価：</label>
-                <select class="form-select" th:field="*{rating}" aria-label="Default select example">
-                  <option value="1" selected>★</option>
-                  <option value="2">★★</option>
-                  <option value="3">★★★</option>
-                  <option value="4">★★★★</option>
-                  <option value="5">★★★★★</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" th:field="*{enable}" value="1"
-                    th:id="${#ids.seq('enable')}"  th:checked="*{enable == '1'}">
-                  <label class="form-check-label" th:for="${#ids.prev('enable')}">
-                    表示する
-                  </label>
+                <div class="form-group" th:classappend="${#fields.hasErrors('title')}? has-error">
+                  <label>作品タイトル：<span class="text-danger">※</span></label>
+                  <input type="text" th:field="*{title}" class="form-control"  th:errorclass="fieldError">
+                  <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
                 </div>
-              </div>
-              <br />
+                <div class="form-group" th:classappend="${#fields.hasErrors('shortComment')}? has-error">
+                  <label>見出しコメント：<span class="text-danger">※</span></label>
+                  <input type="text" th:field="*{shortComment}" class="form-control">
+                  <span class="text-danger" th:if="${#fields.hasErrors('shortComment')}" th:errors="*{shortComment}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('watchedDate')}? has-error">
+                  <label>鑑賞日：<span class="text-danger">※</span></label>
+                  <input type="text" th:field="*{watchedDate}" class="form-control">
+                  <span class="text-danger" th:if="${#fields.hasErrors('watchedDate')}" th:errors="*{watchedDate}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('watchedTime')}? has-error">
+                  <label>上映時刻：<span class="text-danger">※</span></label>
+                  <input type="text" th:field="*{watchedTime}" class="form-control">
+                  <span class="text-danger" th:if="${#fields.hasErrors('watchedTime')}" th:errors="*{watchedTime}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('theater')}? has-error">
+                  <label>劇場名：<span class="text-danger">※</span></label>
+                  <input type="text" th:field="*{theater}" class="form-control">
+                  <span class="text-danger" th:if="${#fields.hasErrors('theater')}" th:errors="*{theater}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('screen')}? has-error">
+                  <label>スクリーン：<span class="text-danger"></span></label>
+                  <input type="text" th:field="*{screen}" class="form-control">
+                  <span class="text-danger" th:if="${#fields.hasErrors('screen')}" th:errors="*{screen}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('mainComment')}? has-error">
+                  <label>コメント本文：</label>
+                  <textarea th:field="*{mainComment}" rows="10" cols="40" class="form-control"></textarea>
+                  <span class="text-danger" th:if="${#fields.hasErrors('mainComment')}" th:errors="*{mainComment}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('rating')}? has-error">
+                  <label>評価：</label>
+                  <select class="form-select" id="rating", name="rating">
+                    <option th:each="rating : ${ratingList}" th:value="${rating.value}" th:text="${rating.indication}"
+                      th:selected="${rating.value} == ${selectedValue}">
+                    </option>
+                  </select>
+                  <span class="text-danger" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></span>
+                </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('enable')}? has-error">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{enable}" value="1"
+                      th:id="${#ids.seq('enable')}"  th:checked="*{enable == '1'}">
+                    <label class="form-check-label" th:for="${#ids.prev('enable')}">
+                      表示する
+                    </label>
+                  </div>
+                </div>
+                <br>
+              <br>
               <div class="text-left">
                 <input type="submit" value="　登録　" class="btn btn-primary">
                 <a class="btn btn-secondary" href="javascript:history.back();" role="button">キャンセル</a>

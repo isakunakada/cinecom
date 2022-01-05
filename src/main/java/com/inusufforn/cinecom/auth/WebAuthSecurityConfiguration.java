@@ -13,7 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import com.inusufforn.cinecom.common.util.DataSourceConfig;
 import com.inusufforn.cinecom.service.ReviewUserDetailsServiceImpl;
 
 /**
@@ -25,6 +28,9 @@ import com.inusufforn.cinecom.service.ReviewUserDetailsServiceImpl;
 public class WebAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private ReviewUserDetailsServiceImpl reviewUserService;
+
+    @Autowired
+    private DataSourceConfig dataSourceConfig;
 
     /**
      * @inheritDoc
@@ -65,9 +71,25 @@ public class WebAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/")           // 認証後にユーザーがリダイレクトされる場所を指定
             .usernameParameter("username")    // Usernameのパラメータとして使用する項目のnameを設定
             .passwordParameter("password")    // Passwordのパラメータとして使用する項目のnameを設定
-            .permitAll();
+            .permitAll()
+            .and()
+            .rememberMe()    // ログイン状態を保持
+            .tokenRepository(this.createTokenRepository());
 
             http.logout().logoutSuccessUrl("/login").permitAll();
     }
 
+    /**
+     * 
+     * @return
+     */
+    public PersistentTokenRepository createTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSourceConfig.getDataSource());
+        // プロジェクトの開始時または開始時以外にトークン情報を保存するためのテーブルを作成しない設定
+        // 別途、手動で(persistent_loginsを)生成
+        tokenRepository.setCreateTableOnStartup(false);
+
+        return tokenRepository;
+    }
 }
